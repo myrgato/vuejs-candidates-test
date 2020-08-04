@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       table: {
+        showFixOptions: true,
         getViews: this.getTableViews,
         createView: this.createTableView,
         updateView: this.updateTableView,

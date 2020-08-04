@@ -5,7 +5,11 @@
       "filter": "Filter",
       "displayPreferences": "Display Preferences",
       "share": "Share",
-      "export": "Export"
+      "export": "Export",
+      "fixHeader": "Fix Header",
+      "fixFirstColumn": "Fix First Column",
+      "unfixHeader": "Unfix Header",
+      "unfixFirstColumn": "Unfix First Column"
     },
     "caption": {
       "title": "{total} items"
@@ -47,6 +51,16 @@
 
         <div class="table-actions">
           <slot name="custom_action" />
+
+          <template v-if="this.showFixOptions">
+            <b-button variant="outline-dark" class="custom-outline-dark text" @click="toggleFixedHeader">
+              {{ this.fixHeader ? $t('actions.unfixHeader') : $t('actions.fixHeader') }}
+            </b-button>
+
+            <b-button variant="outline-dark" class="custom-outline-dark text" @click="toggleFixedFirstColumn">
+              {{ this.fixFirstColumn ? $t('actions.unfixFirstColumn') : $t('actions.fixFirstColumn') }}
+            </b-button>
+          </template>
 
           <b-button id="table-filter" :pressed.sync="showFilter" variant="outline-dark" class="custom-outline-dark">
             <font-awesome-icon icon="filter" />
@@ -114,7 +128,7 @@
       />
     </div>
 
-    <div v-if="view" class="table-view-component">
+    <div v-if="view" class="table-view-component" :class="tableFixedState">
       <div ref="thead" class="table-view-thead">
         <div class="table-view-tr">
           <div class="table-view-th" :class="sortedColumn.id === firstColumnId ? 'sorted-header' : ''">
@@ -263,6 +277,11 @@ export default {
     URLField // eslint-disable-line vue/no-unused-components
   },
   props: {
+    showFixOptions: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     getViews: {
       type: Function,
       required: true
@@ -385,6 +404,8 @@ export default {
   },
   data() {
     return {
+      fixHeader: false,
+      fixFirstColumn: false,
       views: [],
       view: null,
       sortTypes: [
@@ -547,6 +568,12 @@ export default {
     EventBus.$off('tableview::refresh')
   },
   computed: {
+    tableFixedState() {
+      let classes = [];
+      if (this.fixHeader) classes = [ ...classes, 'stickyHeader'];
+      if (this.fixFirstColumn) classes = [ ...classes, 'stickyFirstColumn '];
+      return classes.join(' ');
+    },
     isOwner() {
       return false
     },
@@ -589,6 +616,12 @@ export default {
     }
   },
   methods: {
+    toggleFixedHeader() {
+      this.fixHeader = !this.fixHeader;
+    },
+    toggleFixedFirstColumn() {
+      this.fixFirstColumn = !this.fixFirstColumn;
+    },
     isEmpty,
     isNil,
     onScroll(event) {
@@ -878,6 +911,11 @@ export default {
           }
         }
 
+        .text {
+          width: 144px;
+          font-size: 14px;
+        }
+
         .custom-outline-dark {
           border: 2px solid $dark;
           background-color: white;
@@ -937,16 +975,12 @@ export default {
     font-size: 14px;
 
     .table-view-thead {
-      position: sticky;
-      top: 0;
-      z-index: 1;
-
       overflow: hidden;
       display: flex;
       flex-flow: column;
       background-color: $tertiary;
       color: $white;
-
+      
       .sorted-header {
         background-color: $light;
         color: $tertiary;
@@ -961,10 +995,7 @@ export default {
           &:first-child {
             flex: 1 0 250px;
             width: 250px;
-            position: sticky;
             background-color: $tertiary;
-            z-index: 1;
-            left: 0;
           }
 
           border-top: 1px solid $gray-light;
@@ -1043,8 +1074,6 @@ export default {
             &:first-child {
               flex: 1 0 250px;
               width: 250px;
-              position: sticky;
-              left: 0px;
               background-color: white;
             }
 
@@ -1165,6 +1194,49 @@ export default {
         background-color: $light;
       }
     }
+  }
+}
+
+.stickyHeader {
+  & .table-view-thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+.stickyFirstColumn {
+  & .table-view-thead {
+    & .table-view-th {
+      &:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+      }
+    }
+  }
+
+  & .table-view-tbody {
+    & .table-view-td {
+      &:first-child {
+          position: sticky !important;
+          left: 0 !important;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1110px) {
+  .table-inputs {
+    flex-direction: column !important;
+  }
+
+  .table-actions {
+    margin-left: 0 !important;
+  }
+
+  button {
+    margin-top: 16px;
   }
 }
 </style>
