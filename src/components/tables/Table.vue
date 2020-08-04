@@ -937,6 +937,10 @@ export default {
     font-size: 14px;
 
     .table-view-thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+
       overflow: hidden;
       display: flex;
       flex-flow: column;
@@ -957,6 +961,10 @@ export default {
           &:first-child {
             flex: 1 0 250px;
             width: 250px;
+            position: sticky;
+            background-color: $tertiary;
+            z-index: 1;
+            left: 0;
           }
 
           border-top: 1px solid $gray-light;
@@ -1035,6 +1043,9 @@ export default {
             &:first-child {
               flex: 1 0 250px;
               width: 250px;
+              position: sticky;
+              left: 0px;
+              background-color: white;
             }
 
             border-top: 1px solid $gray-light;
