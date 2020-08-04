@@ -25,7 +25,7 @@
       <div class="movies-column">Genre</div>
     </section>
 
-    <section v-show="isMovies" class="movies">
+    <section v-if="isMovies" class="movies">
       <infinite-scroller :items="allMovies">
         <template #default="{ item }">
           <div class="movie">
@@ -43,7 +43,7 @@
       </infinite-scroller>
     </section>
 
-    <section v-show="isTVShows" class="movies">
+    <section v-if="isTVShows" class="movies">
       <infinite-scroller :items="allTVShows">
         <template #default="{ item }">
           <div class="movie">
