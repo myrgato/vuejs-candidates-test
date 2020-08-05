@@ -26,7 +26,7 @@
     </section>
 
     <section v-show="isMovies" class="movies">
-      <infinite-scroller :items="allMovies" :isShowing="this.movieType === 'movie'">
+      <infinite-scroller :items="allMovies" :isShowing="isMovies">
         <template #default="{ item }">
           <div class="movie">
             <div class="movie-info">
@@ -44,7 +44,7 @@
     </section>
 
     <section v-show="isTVShows" class="movies">
-      <infinite-scroller :items="allTVShows" :isShowing="this.movieType === 'TV Show'">
+      <infinite-scroller :items="allTVShows" :isShowing="isTVShows">
         <template #default="{ item }">
           <div class="movie">
             <div class="movie-info">
