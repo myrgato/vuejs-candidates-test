@@ -25,8 +25,8 @@
       <div class="movies-column">Genre</div>
     </section>
 
-    <section v-if="isMovies" class="movies">
-      <infinite-scroller :items="allMovies">
+    <section v-show="isMovies" class="movies">
+      <infinite-scroller :items="allMovies" :isShowing="this.movieType === 'movie'">
         <template #default="{ item }">
           <div class="movie">
             <div class="movie-info">
@@ -43,8 +43,8 @@
       </infinite-scroller>
     </section>
 
-    <section v-if="isTVShows" class="movies">
-      <infinite-scroller :items="allTVShows">
+    <section v-show="isTVShows" class="movies">
+      <infinite-scroller :items="allTVShows" :isShowing="this.movieType === 'TV Show'">
         <template #default="{ item }">
           <div class="movie">
             <div class="movie-info">

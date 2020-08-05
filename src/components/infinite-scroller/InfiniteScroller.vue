@@ -43,6 +43,11 @@ import { getScrollableParent } from '@/core/html'
 export default {
   name: 'InfiniteScroller',
   props: {
+    isShowing: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
     items: {
       type: Array,
       default: () => []
@@ -190,6 +195,7 @@ export default {
       return { first, last }
     },
     async onScroll() {
+      console.log('called');
       if (!this.scrolling) {
         this.scrolling = true
 
@@ -201,10 +207,10 @@ export default {
       }
     },
     async init() {
-      if (this.isInit) {
+      if (this.isInit && !this.isShowing) {
         return
       }
-
+      
       await this.$nextTick()
       await this.getScroller()
 
@@ -227,6 +233,12 @@ export default {
     }
   },
   watch: {
+     isShowing: {
+      immediate: true, 
+      async handler () {
+        await this.init();
+      }
+    },
     async items() {
       if (!this.$el) {
         return
